@@ -2,6 +2,8 @@ import type {NextConfig} from "next";
 
 const nextConfig: NextConfig = {
     /* config options here */
+    basePath: '/nextjs-books',  // ← Base Path hier
+    trailingSlash: true,
     output: 'export',
     images: {
         remotePatterns: [
