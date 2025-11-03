@@ -96,7 +96,6 @@ export default function Home() {
         <Button
           onClick={handleSubmit}
           type="submit"
-          variant="outline"
           className="bg-primary text-primary-foreground shadow rounded-full min-h-11 min-w-11">
           <Search />
         </Button>
