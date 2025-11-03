@@ -35,9 +35,9 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
-        />
-
-        {children}
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

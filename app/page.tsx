@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input"
 
 
 import { Search, X, ChevronRightCircle } from "lucide-react"
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 type Book = {
   isbn_13: number,
@@ -74,6 +75,8 @@ export default function Home() {
   return (
     <main>
       <form onSubmit={handleSubmit} className="flex w-full max-w-md items-center gap-2 mx-auto">
+        <ThemeToggle/>
+
         <div className="relative flex-1">
           <Input
             type="text"
