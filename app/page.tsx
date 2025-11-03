@@ -1,65 +1,152 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Spinner } from "@/components/ui/spinner"
+import { Input } from "@/components/ui/input"
+
+
+import { Search, X, ChevronRightCircle } from "lucide-react"
+
+type Book = {
+  isbn_13: number,
+  isbn_10: number,
+  title: string,
+  id: string,
+  author: string,
+  publisher: string,
+  pubDate: Date,
+  description: string,
+  pages: number,
+  cover: string
+}
 
 export default function Home() {
+  const [query, setQuery] = useState("");
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  async function getBooks(searchTerm: string): Promise<void> {
+    if (!searchTerm.trim()) return;
+    setLoading(true);
+
+    const res = await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+        searchTerm
+      )}&orderBy=relevance&maxResults=12`
+    );
+
+    const data = await res.json();
+
+    const results =
+      data.items?.map((item: any) => ({
+        id: item.id,
+        title: item.volumeInfo.title,
+        author: item.volumeInfo.authors?.[0] || "Unbekannt",
+        publisher: item.volumeInfo.publisher,
+        pubDate: item.volumeInfo.publishedDate,
+        description: item.volumeInfo.description,
+        pages: item.volumeInfo.pageCount,
+        cover:
+          item.volumeInfo.imageLinks?.thumbnail ||
+          item.volumeInfo.imageLinks?.smallThumbnail ||
+          "/book-fallback.png"
+      })) || []
+    setBooks(results);
+    setLoading(false);
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    getBooks(query);
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main>
+      <form onSubmit={handleSubmit} className="flex w-full max-w-md items-center gap-2 mx-auto">
+        <div className="relative flex-1">
+          <Input
+            type="text"
+            placeholder="Büchersuche"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="rounded-full shadow min-h-11 pr-10"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery('')}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 
+                   text-gray-400 hover:text-primary 0 transition-colors"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <X />
+            </button>
+          )}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <Button
+          onClick={handleSubmit}
+          type="submit"
+          variant="outline"
+          className="bg-primary text-primary-foreground shadow rounded-full min-h-11 min-w-11">
+          <Search />
+        </Button>
+      </form>
+      {
+        loading &&
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <Spinner className="text-primary size-5" />
+          <p>Suche läuft...</p>
         </div>
-      </main>
-    </div>
+      }
+      <div className="grid md:grid-cols-4 gap-4 mt-6">
+        {books.map((book) => (
+          <Card key={book.id} className="flex flex-col justify-between hover:shadow-md transition-shadow">
+            <CardHeader className="flex flex-row justify-between items-start gap-4">
+              <div className="flex flex-col flex-1">
+                <CardTitle className="line-clamp-2">{book.title}</CardTitle>
+                <CardDescription>{book.author}</CardDescription>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {book.publisher || "Unbekannter Verlag"}
+                </p>
+              </div>
+
+              <div className="relative w-20 h-30 shrink-0 rounded-sm overflow-hidden">
+                <Image
+                  src={book.cover}
+                  alt={book.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </CardHeader>
+
+            <CardContent>
+              <p className="text-sm text-muted-foreground line-clamp-3">
+                {book.publisher || "Unbekannter Verlag"}
+              </p>
+            </CardContent>
+            <CardFooter className="flex justify-between items-center">
+              <span className="text-xs text-muted-foreground">
+                {book.pages ? `${book.pages} Seiten` : ""}
+              </span>
+              <Button size="sm">
+                Zum Buch 
+                <ChevronRightCircle/>
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    </main>
   );
 }
