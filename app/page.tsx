@@ -13,11 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
-import { Input } from "@/components/ui/input"
-
-
-import { Search, X, ChevronRightCircle } from "lucide-react"
-import { ModeToggle } from "@/components/ui/mode-toggle";
+import { Navbar } from "@/components/Navbar";
+import { ChevronRightCircle } from "lucide-react";
 
 type Book = {
   isbn_13: number,
@@ -67,42 +64,13 @@ export default function Home() {
     setLoading(false);
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    getBooks(query);
-  }
-
   return (
     <main>
-      <form onSubmit={handleSubmit} className="flex w-full max-w-md items-center gap-2 mx-auto">
-        <ModeToggle/>
-
-        <div className="relative flex-1">
-          <Input
-            type="text"
-            placeholder="Büchersuche"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="rounded-full shadow min-h-11 pr-10"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 
-                   text-gray-400 hover:text-primary 0 transition-colors"
-            >
-              <X />
-            </button>
-          )}
-        </div>
-        <Button
-          onClick={handleSubmit}
-          type="submit"
-          className="bg-primary text-primary-foreground shadow rounded-full min-h-11 min-w-11">
-          <Search />
-        </Button>
-      </form>
+      <Navbar
+        query={query}
+        setQuery={setQuery}
+        onSearch={getBooks}
+      />
       {
         loading &&
         <div className="flex items-center justify-center gap-2 mt-4">
@@ -142,8 +110,8 @@ export default function Home() {
                 {book.pages ? `${book.pages} Seiten` : ""}
               </span>
               <Button size="sm">
-                Zum Buch 
-                <ChevronRightCircle/>
+                Zum Buch
+                <ChevronRightCircle />
               </Button>
             </CardFooter>
           </Card>
