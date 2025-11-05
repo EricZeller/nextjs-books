@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
     /* config options here */
     basePath: '/nextjs-books',  // ← Base Path hier
     trailingSlash: true,
-    //output: 'export',
+    output: 'export',
     images: {
         remotePatterns: [
             {
