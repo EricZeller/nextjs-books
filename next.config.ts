@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
                 hostname: "books.google.com",
                 pathname: "/**",
             },
+            {
+                protocol: "http",
+                hostname: "books.google.com",
+                pathname: "/**",
+            },
         ],
     },
     reactStrictMode: true,
