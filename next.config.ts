@@ -2,9 +2,6 @@ import type {NextConfig} from "next";
 
 const nextConfig: NextConfig = {
     /* config options here */
-    basePath: '/nextjs-books',  // ← Base Path hier
-    trailingSlash: true,
-    output: 'export',
     images: {
         remotePatterns: [
             {
@@ -17,13 +14,9 @@ const nextConfig: NextConfig = {
                 hostname: "books.google.com",
                 pathname: "/**",
             },
-            {
-                protocol: "http",
-                hostname: "books.google.com",
-                pathname: "/**",
-            },
         ],
     },
+    reactStrictMode: true,
 };
 
 export default nextConfig;
