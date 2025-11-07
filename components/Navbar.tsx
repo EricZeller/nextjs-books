@@ -48,7 +48,7 @@ export function Navbar({ query, setQuery, onSearch }: NavbarProps) {
         <Search />
       </Button>
       <Link href="/settings">
-        <Avatar className="text-primary min-h-11 min-w-11">
+        <Avatar className="text-primary min-h-11 min-w-11 shadow">
           <AvatarFallback>
             <User className="h-4 w-4" />
           </AvatarFallback>

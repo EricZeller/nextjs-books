@@ -33,7 +33,7 @@ export function BookDetails({ book }: BookDetailsProps) {
                                 alt={book.title}
                                 fill
                                 className="object-cover"
-                                loading="eager"
+                                loading="lazy"
                             />
                         </div>
                     </div>
