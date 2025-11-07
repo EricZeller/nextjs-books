@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Search, User, X } from "lucide-react";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 interface NavbarProps {
   query: string;
@@ -20,7 +21,6 @@ export function Navbar({ query, setQuery, onSearch }: NavbarProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex w-full max-w-md items-center gap-2 mx-auto">
-      <ModeToggle/>
 
       <div className="relative flex-1">
         <Input
@@ -47,11 +47,14 @@ export function Navbar({ query, setQuery, onSearch }: NavbarProps) {
       >
         <Search />
       </Button>
-      <Avatar className="text-primary min-h-11 min-w-11">
-        <AvatarFallback>
-            <User className="h-4 w-4"/>
-        </AvatarFallback>
-      </Avatar>
-    </form>
+      <Link href="/settings">
+        <Avatar className="text-primary min-h-11 min-w-11">
+          <AvatarFallback>
+            <User className="h-4 w-4" />
+          </AvatarFallback>
+        </Avatar>
+      </Link>
+
+    </form >
   );
 }
