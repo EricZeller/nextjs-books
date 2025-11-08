@@ -15,8 +15,7 @@ export function BookDetails({ book }: BookDetailsProps) {
     const [imgLoaded, setImgLoaded] = useState(false);
     return (
         <div className="max-w-4xl mx-auto">
-            <BackLink></BackLink>
-
+            <BackLink/>
             <Card>
                 <CardHeader>
                     <CardTitle className="text-3xl">{book.title}</CardTitle>

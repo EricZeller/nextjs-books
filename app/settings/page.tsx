@@ -4,24 +4,21 @@ import { useTheme } from "next-themes"
 import { LogIn, Moon, Sun, UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { FcGoogle } from "react-icons/fc"
+import { BackLink } from "@/components/BackLink"
 
 
 export default function SettingsPage() {
     const { setTheme } = useTheme()
 
     return (
-        <div className="max-w-2xl mx-auto p-6 space-y-6">
+        <div className="max-w-2xl mx-auto p-6 space-y-4 mt-0">
+            <div className="space-y-0 p-0 px-0 py-0 pl-0 m-0"><BackLink /></div>
             <h1 className="text-3xl font-bold tracking-tight">Einstellungen</h1>
-            <p className="text-muted-foreground">
-                Ändere Deine Nutzererfahrung.
-            </p>
-
             <Separator />
 
             {/* Account Section */}

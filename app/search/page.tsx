@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useBookSearch } from "@/hooks/useBookSearch";
 import { BookGrid } from "@/components/BookGrid";
 import { LoadingSpinner } from "@/components/Loading";
+import { BackLink } from "@/components/BackLink";
 
 function SearchPageContent() {
   const searchParams = useSearchParams();
@@ -18,6 +19,7 @@ function SearchPageContent() {
 
   return (
     <main className="mt-6">
+      <BackLink/>
       {loading && <LoadingSpinner />}
       {!loading && books.length > 0 && <BookGrid books={books} />}
       {!loading && books.length === 0 && query && (
