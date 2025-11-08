@@ -1,30 +1,10 @@
-"use client";
-
-import { Navbar } from "@/components/Navbar";
-import { BookGrid } from "@/components/BookGrid";
-import { LoadingSpinner } from "@/components/Loading";
-import { useBookSearch } from "@/hooks/useBookSearch";
-
-export default function Home() {
-  const { query, setQuery, books, loading, getBooks } = useBookSearch();
-
+export default function HomePage() {
   return (
-    <main className="container mx-auto p-4">
-      <Navbar
-        query={query}
-        setQuery={setQuery}
-        onSearch={getBooks}
-      />
-      
-      {loading && <LoadingSpinner />}
-      
-      <BookGrid books={books} />
-      
-      {!loading && books.length === 0 && query && (
-        <div className="text-center mt-8 text-muted-foreground">
-          Keine Bücher gefunden
-        </div>
-      )}
+    <main className="text-center mt-20">
+      <h1 className="text-3xl font-bold mb-4">Willkommen zur Büchersuche 📚</h1>
+      <p className="text-muted-foreground">
+        Nutze die Suchleiste oben, um Bücher zu finden.
+      </p>
     </main>
   );
 }

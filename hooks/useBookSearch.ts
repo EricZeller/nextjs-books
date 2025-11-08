@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Book } from "@/types/book";
 import { searchBooks } from "@/services/getBooks";
 
-export function useBookSearch() {
+export function useBookSearch(debounceDelay = 400) {
   const [query, setQuery] = useState("");
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function getBooks(searchTerm: string): Promise<void> {
-    if (!searchTerm.trim()) return;
-    
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const getBooks = useCallback(async (searchTerm: string): Promise<void> => {
+    if (!searchTerm.trim()) {
+      setBooks([]);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -23,7 +28,26 @@ export function useBookSearch() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setBooks([]);
+      return;
+    }
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      getBooks(query);
+    }, debounceDelay);
+
+    return () => {
+      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    };
+  }, [query, getBooks, debounceDelay]);
 
   return {
     query,
@@ -31,6 +55,6 @@ export function useBookSearch() {
     books,
     loading,
     error,
-    getBooks,
+    getBooks, 
   };
 }

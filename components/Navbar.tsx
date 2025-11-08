@@ -1,27 +1,31 @@
 "use client";
 
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, User, X } from "lucide-react";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 
-interface NavbarProps {
-  query: string;
-  setQuery: (query: string) => void;
-  onSearch: (searchTerm: string) => void;
-}
+function NavbarContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("query") || "";
+  const [query, setQuery] = useState(initialQuery);
 
-export function Navbar({ query, setQuery, onSearch }: NavbarProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    onSearch(query);
+    if (query.trim()) {
+      router.push(`/search?query=${encodeURIComponent(query.trim())}`);
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-md items-center gap-2 mx-auto">
-
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full max-w-md items-center gap-2 mx-auto p-1.5 pt-3"
+    >
       <div className="relative flex-1">
         <Input
           type="text"
@@ -33,9 +37,9 @@ export function Navbar({ query, setQuery, onSearch }: NavbarProps) {
         {query && (
           <button
             type="button"
-            onClick={() => setQuery('')}
+            onClick={() => setQuery("")}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 
-                     text-gray-400 hover:text-primary transition-colors"
+                       text-gray-400 hover:text-primary transition-colors"
           >
             <X />
           </button>
@@ -48,13 +52,20 @@ export function Navbar({ query, setQuery, onSearch }: NavbarProps) {
         <Search />
       </Button>
       <Link href="/settings">
-        <Avatar className="text-primary min-h-11 min-w-11">
+        <Avatar className="text-primary min-h-11 min-w-11 shadow">
           <AvatarFallback>
             <User className="h-4 w-4" />
           </AvatarFallback>
         </Avatar>
       </Link>
+    </form>
+  );
+}
 
-    </form >
+export function Navbar() {
+  return (
+    <Suspense fallback={<div className="w-full text-center py-2">Laden...</div>}>
+      <NavbarContent />
+    </Suspense>
   );
 }
