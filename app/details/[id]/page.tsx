@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 export default async function DetailPage({ params }: PageProps) {
-    const { id } = await params
+    const { id } = await params;
     const book = await getBookDetails(id);
 
     if (!book) {

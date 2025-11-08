@@ -55,14 +55,13 @@ export default function SettingsPage() {
 
             {/* Theme Section */}
             <Card className="rounded-2xl shadow-sm border">
-                <CardHeader>
-                    <CardTitle>Design</CardTitle>
-                    <CardDescription>Wähle Dein gewünschtes Erscheinungsbild.</CardDescription>
-                </CardHeader>
-                <CardContent className="flex item-center justify-between">
-                    <Label>Theme</Label>
+                <CardHeader className="flex justify-between">
+                    <div className="flex flex-col gap-2">
+                        <CardTitle>Design</CardTitle>
+                        <CardDescription>Wähle Dein gewünschtes Erscheinungsbild.</CardDescription>
+                    </div>
                     <ModeToggle />
-                </CardContent>
+                </CardHeader>
             </Card>
 
             {/* Notifications Section */}
