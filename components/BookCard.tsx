@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -11,12 +13,15 @@ import {
 } from "@/components/ui/card";
 import { ChevronRightCircle } from "lucide-react";
 import { Book } from "@/types/book";
+import { LoadingSpinner } from "@/components/Loading";
+import { use, useState } from "react";
 
 interface BookCardProps {
   book: Book;
 }
 
 export function BookCard({ book }: BookCardProps) {
+  const [imgLoaded, setImgLoaded] = useState(false);
   return (
     <Card className="flex flex-col justify-between hover:shadow-md transition-shadow">
       <CardHeader className="flex flex-row justify-between items-start gap-4">
@@ -29,11 +34,18 @@ export function BookCard({ book }: BookCardProps) {
         </div>
 
         <div className="relative w-20 h-30 shrink-0 rounded-sm overflow-hidden">
+          {!imgLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <LoadingSpinner />
+            </div>
+          )}
           <Image
             src={book.cover}
             alt={book.title}
             fill
-            className="object-cover"
+            className={`object-cover transition-opacity duration-300 ${imgLoaded ? "opacity-100" : "opacity-0"
+              }`}
+            onLoadingComplete={() => setImgLoaded(true)}
           />
         </div>
       </CardHeader>
@@ -43,7 +55,7 @@ export function BookCard({ book }: BookCardProps) {
           {book.description || book.publisher || "Unbekannter Verlag"}
         </p>
       </CardContent>
-      
+
       <CardFooter className="flex justify-between items-center">
         <span className="text-xs text-muted-foreground">
           {book.pages ? `${book.pages} Seiten` : ""}

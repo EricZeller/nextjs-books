@@ -1,22 +1,21 @@
+"use client";
+
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book } from "@/types/book";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { BackLink } from "./BackLink";
+import { useState } from "react";
+import { LoadingSpinner } from "./Loading";
 
 interface BookDetailsProps {
     book: Book;
 }
 
 export function BookDetails({ book }: BookDetailsProps) {
+    const [imgLoaded, setImgLoaded] = useState(false);
     return (
         <div className="max-w-4xl mx-auto">
-            {/* Zurück-Button */}
-            <Link href="/" className="inline-flex items-center gap-2 mb-6 text-sm text-muted-foreground hover:text-primary">
-                <ArrowLeft className="w-4 h-4" />
-                Zurück zur Suche
-            </Link>
+            <BackLink></BackLink>
 
             <Card>
                 <CardHeader>
@@ -28,12 +27,18 @@ export function BookDetails({ book }: BookDetailsProps) {
                     {/* Buchcover */}
                     <div className="md:col-span-1">
                         <div className="relative w-64 h-96 mx-auto rounded-md overflow-hidden shadow-lg">
+                            {!imgLoaded && (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <LoadingSpinner />
+                                </div>
+                            )}
                             <Image
                                 src={book.cover}
                                 alt={book.title}
                                 fill
-                                className="object-cover"
-                                loading="lazy"
+                                className={`object-cover transition-opacity duration-300 ${imgLoaded ? "opacity-100" : "opacity-0"
+                                    }`}
+                                onLoadingComplete={() => setImgLoaded(true)}
                             />
                         </div>
                     </div>
