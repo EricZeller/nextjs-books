@@ -24,7 +24,7 @@ function NavbarContent() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-full max-w-md items-center gap-2 mx-auto"
+      className="flex w-full max-w-md items-center gap-2 mx-auto p-1.5 pt-3"
     >
       <div className="relative flex-1">
         <Input
