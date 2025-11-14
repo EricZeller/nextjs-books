@@ -1,19 +1,61 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, User, X } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Search, X, UserRoundX } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
-function NavbarContent() {
+export function NavbarContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("query") || "";
   const [query, setQuery] = useState(initialQuery);
 
+  const [user, setUser] = useState<User | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [initials, setInitials] = useState<string>("?");
+
+  // Funktion, um User-State zu setzen
+  const updateUserState = (u: User | null) => {
+    setUser(u);
+
+    if (!u) {
+      setAvatarUrl(null);
+      setInitials("?");
+      return;
+    }
+
+    const meta = u.user_metadata;
+    setAvatarUrl(meta?.avatar_url || null);
+
+    let name = meta?.full_name || u.email || "";
+    let parts = name.trim().split(" ");
+    let ini = parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0]?.[0] || "?";
+    setInitials(ini.toUpperCase());
+  };
+
+  // useEffect für initialen User + Auth-Listener
+  useEffect(() => {
+    async function initUser() {
+      const { data: { session } } = await supabase.auth.getSession();
+      updateUserState(session?.user ?? null);
+    }
+
+    initUser();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      updateUserState(session?.user ?? null);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  // Search
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (query.trim()) {
@@ -38,24 +80,26 @@ function NavbarContent() {
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 
-                       text-gray-400 hover:text-primary transition-colors"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors"
           >
             <X />
           </button>
         )}
       </div>
-      <Button
-        type="submit"
-        className="bg-primary text-primary-foreground shadow rounded-full min-h-11 min-w-11"
-      >
+
+      <Button type="submit" className="bg-primary text-primary-foreground shadow rounded-full min-h-11 min-w-11">
         <Search />
       </Button>
+
       <Link href="/settings">
         <Avatar className="text-primary min-h-11 min-w-11 shadow">
-          <AvatarFallback>
-            <User className="h-4 w-4" />
-          </AvatarFallback>
+          {avatarUrl ? (
+            <AvatarImage src={avatarUrl} alt="Avatar" />
+          ) : (
+            <AvatarFallback>
+              {user ? initials : <UserRoundX className="h-4 w-4" />}
+            </AvatarFallback>
+          )}
         </Avatar>
       </Link>
     </form>
