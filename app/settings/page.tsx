@@ -100,7 +100,7 @@ export default function SettingsPage() {
                         <div className="flex flex-col gap-4">
                             <p className="text-sm text-muted-foreground">
                                 Eingeloggt als:<br />
-                                <span className="font-medium text-foreground">{user.email}</span>
+                                <span className="font-medium text-foreground">{user?.user_metadata?.name} ({user?.user_metadata?.email})</span>
                             </p>
 
                             <Button
