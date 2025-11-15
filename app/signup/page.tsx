@@ -45,7 +45,7 @@ export default function SignupPage() {
         <Input type="email" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} required className="input" />
         <Input type="password" placeholder="Passwort" value={password} onChange={e=>setPassword(e.target.value)} required className="input" />
         {errorMsg && <p className="text-red-500">{errorMsg}</p>}
-        <Button disabled={loading} className="btn-primary">{loading ? "..." : "Account erstellen"}</Button>
+        <Button disabled={loading} className="w-full">{loading ? "..." : "Account erstellen"}</Button>
       </form>
     </div>
   )

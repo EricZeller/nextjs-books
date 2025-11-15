@@ -136,12 +136,12 @@ export default function SettingsPage() {
                 <CardContent className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                         <Label htmlFor="email-notifications">Email-Mitteilung</Label>
-                        <Switch id="email-notifications" />
+                        <Switch disabled id="email-notifications" />
                     </div>
 
                     <div className="flex items-center justify-between">
                         <Label htmlFor="push-notifications">Push-Mitteilung</Label>
-                        <Switch id="push-notifications" />
+                        <Switch disabled id="push-notifications" />
                     </div>
                 </CardContent>
             </Card>

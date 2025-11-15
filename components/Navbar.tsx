@@ -31,7 +31,14 @@ export function NavbarContent() {
     }
 
     const meta = u.user_metadata;
-    setAvatarUrl(meta?.avatar_url || null);
+    const rawUrl =
+      meta?.avatar_url ||
+      meta?.picture || // Google verwendet meist "picture"
+      null;
+
+    // Leerstring verhindern → immer null statt ""
+    const cleanUrl = rawUrl && rawUrl.trim() !== "" ? rawUrl : null;
+    setAvatarUrl(cleanUrl);
 
     let name = meta?.full_name || u.email || "";
     let parts = name.trim().split(" ");
@@ -54,6 +61,7 @@ export function NavbarContent() {
 
     return () => listener.subscription.unsubscribe();
   }, []);
+
 
   // Search
   function handleSubmit(e: React.FormEvent) {
@@ -92,16 +100,24 @@ export function NavbarContent() {
       </Button>
 
       <Link href="/settings">
-        <Avatar className="text-primary min-h-11 min-w-11 shadow">
-          {avatarUrl ? (
-            <AvatarImage src={avatarUrl} alt="Avatar" />
-          ) : (
-            <AvatarFallback>
-              {user ? initials : <UserRoundX className="h-4 w-4" />}
+        <Avatar className="min-h-11 min-w-11 shadow bg-secondary">
+          
+            <AvatarImage src={avatarUrl||undefined} alt="Avatar" />
+          
+            <AvatarFallback className="text-primary flex items-center justify-center">
+              {user ? (
+                initials
+              ) : (
+                <span className="flex items-center justify-center">
+                  <UserRoundX />
+                </span>
+              )}
             </AvatarFallback>
-          )}
+          
         </Avatar>
       </Link>
+
+
     </form>
   );
 }
