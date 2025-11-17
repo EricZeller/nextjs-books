@@ -52,7 +52,12 @@ export default function SettingsPage() {
             {/* Account Section */}
             <Card className="rounded-2xl shadow-sm border">
                 <CardHeader>
-                    <CardTitle>Account</CardTitle>
+                    <CardTitle className="flex items-center justify-between">
+                        Account
+                        {!loading&&user&&(<Button variant={"link"} onClick={()=>router.push("/profile")}>
+                            Profil ansehen
+                        </Button>)}
+                    </CardTitle>
                     <CardDescription>
                         {user ? "Du bist eingeloggt." : "Logge Dich ein oder erstelle einen neuen Account."}
                     </CardDescription>
@@ -105,7 +110,7 @@ export default function SettingsPage() {
 
                             <Button
                                 onClick={handleLogout}
-                                variant="outline"
+                                variant="destructive"
                                 className="py-2"
                             >
                                 Logout
