@@ -7,12 +7,17 @@ import { useState, useEffect } from "react"
 import { Button } from "./ui/button"
 import { UserPlus } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { BookGrid } from "./BookGrid"
+import { getFavorites } from "@/lib/favorites"
+import { Book } from "@/types/book"
+
 
 export default function ProfileDetails() {
-    
+
     const router = useRouter()
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
+    const [books, setBooks] = useState<Book[]>([]);
 
     const provider = user?.app_metadata?.provider || "unknown"
 
@@ -22,7 +27,13 @@ export default function ProfileDetails() {
             setUser(data?.user ?? null)
             setLoading(false)
         }
-        loadUser()
+        loadUser();
+
+        async function loadFavs() {
+            const favs = await getFavorites();
+            setBooks(favs);
+        }
+        loadFavs();
     }, [])
     return (
         <div>
@@ -34,8 +45,9 @@ export default function ProfileDetails() {
                         Hallo {user?.user_metadata.name}!
                     </h2>
                     <p><strong>E-Mail:</strong> {user.email}</p>
-                    
+
                     <p><strong>Login Methode:</strong> {provider.charAt(0).toUpperCase() + provider.slice(1)}</p>
+                    <BookGrid books={books} />
                 </div>
             ) : (
                 <div className="flex flex-row items-center justify-between">

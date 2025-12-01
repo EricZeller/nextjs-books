@@ -1,17 +1,17 @@
 import { supabase } from "@/lib/supabase/client";
 
 export async function addFavorite(isbn: string) {
-    const { data: userData } = await supabase.auth.getUser();
-    const user = userData?.user;
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData?.user;
 
-    if (!user) return { error: "Nicht eingeloggt" };
+  if (!user) return { error: "Nicht eingeloggt" };
 
-    const { error } = await supabase.from("favorites").insert({
-        user_id: user.id,
-        isbn,
-    });
+  const { error } = await supabase.from("favorites").insert({
+    user_id: user.id,
+    isbn,
+  });
 
-    return { error };
+  return { error };
 }
 
 
