@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Buxsie Ballern Bücher",
-  description: "Gebaut mit Next.js",
+  title: "BookKeeper",
+  description: "Deine persönliche Bücherverwaltung mit Next.js und Supabase",
 };
 
 export default function RootLayout({

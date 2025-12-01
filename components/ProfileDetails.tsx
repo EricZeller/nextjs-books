@@ -14,6 +14,8 @@ export default function ProfileDetails() {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
 
+    const provider = user?.app_metadata?.provider || "unknown"
+
     useEffect(() => {
         async function loadUser() {
             const { data } = await supabase.auth.getUser()
@@ -32,7 +34,8 @@ export default function ProfileDetails() {
                         Hallo {user?.user_metadata.name}!
                     </h2>
                     <p><strong>E-Mail:</strong> {user.email}</p>
-                    <p><strong>User ID:</strong> {user.id}</p>
+                    
+                    <p><strong>Login Methode:</strong> {provider.charAt(0).toUpperCase() + provider.slice(1)}</p>
                 </div>
             ) : (
                 <div className="flex flex-row items-center justify-between">

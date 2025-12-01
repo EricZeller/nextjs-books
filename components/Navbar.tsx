@@ -40,7 +40,7 @@ export function NavbarContent() {
     const cleanUrl = rawUrl && rawUrl.trim() !== "" ? rawUrl : null;
     setAvatarUrl(cleanUrl);
 
-    let name = meta?.full_name || u.email || "";
+    let name = u?.user_metadata?.name || u.email || "";
     let parts = name.trim().split(" ");
     let ini = parts.length >= 2 ? parts[0][0] + parts[1][0] : parts[0]?.[0] || "?";
     setInitials(ini.toUpperCase());

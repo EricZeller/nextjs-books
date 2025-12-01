@@ -14,14 +14,17 @@ import {
 import { ChevronRightCircle } from "lucide-react";
 import { Book } from "@/types/book";
 import { LoadingSpinner } from "@/components/Loading";
-import { use, useState } from "react";
+import { useState } from "react";
+import { FavoriteButton } from "./FavoriteButton";
 
 interface BookCardProps {
   book: Book;
 }
 
 export function BookCard({ book }: BookCardProps) {
+
   const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <Card className="flex flex-col justify-between hover:shadow-md transition-shadow">
       <CardHeader className="flex flex-row justify-between items-start gap-4">

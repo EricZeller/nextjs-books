@@ -6,6 +6,7 @@ import { Book } from "@/types/book";
 import { BackLink } from "./BackLink";
 import { useState } from "react";
 import { LoadingSpinner } from "./Loading";
+import { FavoriteButton } from "./FavoriteButton";
 
 interface BookDetailsProps {
     book: Book;
@@ -15,10 +16,14 @@ export function BookDetails({ book }: BookDetailsProps) {
     const [imgLoaded, setImgLoaded] = useState(false);
     return (
         <div className="max-w-4xl mx-auto">
-            <BackLink/>
+            <BackLink />
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-3xl">{book.title}</CardTitle>
+                    <div className="flex flex-row justify-between">
+                        <CardTitle className="text-3xl">{book.title}</CardTitle>
+                        {book.isbn_13 && <FavoriteButton isbn={book.isbn_13.toString()} isInitiallyFavorite={false}></FavoriteButton>}
+
+                    </div>
                     <p className="text-xl text-muted-foreground">{book.author}</p>
                 </CardHeader>
 
